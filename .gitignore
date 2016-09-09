@@ -1,0 +1,12 @@
+src/.vs/
+src/packages/
+src/King.FlightSearch.Web/bin/
+src/King.FlightSearch.Web/obj/
+src/King.FlightSearch.DAL/bin/
+src/King.FlightSearch.DAL/obj/
+src/King.FlightSearch.Services.External.Tests/bin/
+src/King.FlightSearch.Services/obj/
+src/King.FlightSearch.Services/bin/
+src/King.FlightSearch.Services.External/bin/
+src/King.FlightSearch.Services.External/obj/
+src/King.FlightSearch.Services.External.Tests/obj/

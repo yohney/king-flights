@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{18C8D4B7-9AC9-403A-9F5B-316F3CB85D7D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>King.FlightSearch.DAL</RootNamespace>
+    <AssemblyName>King.FlightSearch.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Airport.cs" />
+    <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\ItineraryEntry.cs" />
+    <Compile Include="Entities\SearchEntry.cs" />
+    <Compile Include="Entities\FlightEntry.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="FlightDbContext.cs" />
+    <Compile Include="Migrations\201609081556040_initial.cs" />
+    <Compile Include="Migrations\201609081556040_initial.Designer.cs">
+      <DependentUpon>201609081556040_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609081735360_FlightEntryChanges.cs" />
+    <Compile Include="Migrations\201609081735360_FlightEntryChanges.Designer.cs">
+      <DependentUpon>201609081735360_FlightEntryChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609081830538_Itinerary.cs" />
+    <Compile Include="Migrations\201609081830538_Itinerary.Designer.cs">
+      <DependentUpon>201609081830538_Itinerary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609090647350_minorchanges.cs" />
+    <Compile Include="Migrations\201609090647350_minorchanges.Designer.cs">
+      <DependentUpon>201609090647350_minorchanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Dto\FlightEntryDTO.cs" />
+    <Compile Include="Repository\Dto\ItineraryEntryDTO.cs" />
+    <Compile Include="Repository\Dto\SearchEntryDTO.cs" />
+    <Compile Include="Repository\ItineraryEntryRepository.cs" />
+    <Compile Include="Repository\SearchEntryRepository.cs" />
+    <Compile Include="Repository\RepositoryBase.cs" />
+    <Compile Include="Repository\FlightEntryRepository.cs" />
+    <Compile Include="Repository\AirportRepository.cs" />
+    <Compile Include="Repository\Dto\AirportDTO.cs" />
+    <Compile Include="Repository\Dto\EntityBaseDTO.cs" />
+    <Compile Include="Repository\Dto\Infrastructure\MapperBase.cs" />
+    <Compile Include="Shared\Enums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201609081556040_initial.resx">
+      <DependentUpon>201609081556040_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609081735360_FlightEntryChanges.resx">
+      <DependentUpon>201609081735360_FlightEntryChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609081830538_Itinerary.resx">
+      <DependentUpon>201609081830538_Itinerary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609090647350_minorchanges.resx">
+      <DependentUpon>201609090647350_minorchanges.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
