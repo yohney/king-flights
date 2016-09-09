@@ -49,6 +49,15 @@ namespace King.FlightSearch.Web {
         protected global::System.Web.UI.WebControls.TextBox txtDeparture;
         
         /// <summary>
+        /// hdnDepartureId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDepartureId;
+        
+        /// <summary>
         /// btnSearch control.
         /// </summary>
         /// <remarks>
