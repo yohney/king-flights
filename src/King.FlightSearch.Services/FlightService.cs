@@ -68,7 +68,7 @@ namespace King.FlightSearch.Services
             return this.Ok();
         }
 
-        public ServiceResult<List<FlightEntryDTO>> Search(FlightSearchModel model)
+        public ServiceResult<List<ItineraryModel>> Search(FlightSearchModel model)
         {
             var searchHash = model.AirportFromId + "." +
                 model.AirportToId + "." +
@@ -81,7 +81,29 @@ namespace King.FlightSearch.Services
             var cachedResults = this._flightRepository.GetCached(searchHash);
 
             if (cachedResults.Count > 0)
-                return this.Ok(cachedResults);
+            {
+                var grouped = cachedResults.GroupBy(p => p.ItineraryEntryId);
+                var result = new List<ItineraryModel>();
+
+                foreach(var i in grouped)
+                {
+                    var itModel = new ItineraryModel();
+                    itModel.Price = i.First().ItineraryEntryTotalPrice;
+                    itModel.InboundFlights = i
+                        .Where(p => p.Type == FlightType.Inbound)
+                        .OrderBy(p => p.DepartureTime)
+                        .ToList();
+
+                    itModel.OutboundFlights = i
+                        .Where(p => p.Type == FlightType.Outbound)
+                        .OrderBy(p => p.DepartureTime)
+                        .ToList();
+
+                    result.Add(itModel);
+                }
+
+                return this.Ok(result);
+            }
 
             var requestModel = new FlightApiRequestModel();
             requestModel.AirportFromCode = this._airportRepository.GetAirportCode(model.AirportFromId);
@@ -94,7 +116,7 @@ namespace King.FlightSearch.Services
 
             var flightApiResult = this._flightApiService.FindFlights(requestModel);
             if (!flightApiResult.IsSuccess)
-                return this.Error<List<FlightEntryDTO>>(flightApiResult.ResponseMessage);
+                return this.Error<List<ItineraryModel>>(flightApiResult.ResponseMessage);
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required,
                 new TransactionOptions() { IsolationLevel = IsolationLevel.ReadCommitted }))
@@ -123,15 +145,31 @@ namespace King.FlightSearch.Services
                     itineraryEntry.TotalPrice = price;
                     this._itineraryEntryRepository.InsertOrUpdate(itineraryEntry);
 
+                    var outboundAdded = new HashSet<string>();
                     foreach (var outbound in fareItem.itineraries.Select(i => i.outbound))
                     {
                         var flightEntry = this.GetFlightEntry(itineraryEntry.Id, outbound.flights, FlightType.Outbound);
+
+                        var hashOutKey = flightEntry.ArrivalTime.ToString() + "." + flightEntry.DepartureTime.ToString() + "." + flightEntry.StopsCount;
+                        if (outboundAdded.Contains(hashOutKey))
+                            continue;
+
+                        outboundAdded.Add(hashOutKey);
+
                         this._flightRepository.InsertOrUpdate(flightEntry);
                     }
 
-                    foreach (var inbound in fareItem.itineraries.Select(i => i.inbound))
+                    var inboundAdded = new HashSet<string>();
+                    foreach (var inbound in fareItem.itineraries.Select(i => i.inbound).Where(i => i != null))
                     {
                         var flightEntry = this.GetFlightEntry(itineraryEntry.Id, inbound.flights, FlightType.Inbound);
+
+                        var hashInKey = flightEntry.ArrivalTime.ToString() + "." + flightEntry.DepartureTime.ToString() + "." + flightEntry.StopsCount;
+                        if (inboundAdded.Contains(hashInKey))
+                            continue;
+
+                        inboundAdded.Add(hashInKey);
+
                         this._flightRepository.InsertOrUpdate(flightEntry);
                     }
                 }
@@ -147,7 +185,7 @@ namespace King.FlightSearch.Services
             flightEntry.ItineraryEntryId = itineraryId;
             flightEntry.StopsCount = flights.Count - 1;
             flightEntry.DepartureTime = flights.Select(p => DateTime.ParseExact(p.departs_at, "yyyy-MM-ddTHH:mm", null)).Min();
-            flightEntry.ArrivalTime = flights.Select(p => DateTime.ParseExact(p.departs_at, "yyyy-MM-ddTHH:mm", null)).Max();
+            flightEntry.ArrivalTime = flights.Select(p => DateTime.ParseExact(p.arrives_at, "yyyy-MM-ddTHH:mm", null)).Max();
             flightEntry.Type = flightType;
             return flightEntry;
         }

@@ -22,6 +22,11 @@ namespace King.FlightSearch.Web
             this.RegisterBindings<FlightSearchModel>()
                 .With(p => p.AirportFromId, this.hdnDepartureId)
                 .With(p => p.AirportToId, this.hdnDestinationId)
+                .With(p => p.DepartureDate, this.txtDepartureDate)
+                .With(p => p.ReturnDate, this.txtReturnDate)
+                .With(p => p.AdultsCount, this.txtAdults)
+                .With(p => p.ChildrenCount, this.txtChildren)
+                .With(p => p.Currency, this.ddCurrency)
                 .Save();
         }
 
@@ -37,7 +42,12 @@ namespace King.FlightSearch.Web
                 this.updMessage.Update();
                 return;
             }
-
+            else
+            {
+                this.rptItineraries.DataSource = result.Data;
+                this.rptItineraries.DataBind();
+                this.updResults.Update();
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using King.FlightSearch.DAL.Shared;
 
 namespace King.FlightSearch.Web.Infrastructure
 {
@@ -55,6 +56,21 @@ namespace King.FlightSearch.Web.Infrastructure
 
             public BindingBuilder<TModel> With<TProperty>(Expression<Func<TModel, TProperty>> expression, TextBox txt)
             {
+                var propertyBinder = new PropertyBinder<TModel, TProperty>();
+                propertyBinder.PropertySelector = expression;
+                propertyBinder.ValueExtractor = this.GetParsedValue<TProperty>(() => txt.Text);
+                this._properties.Add(propertyBinder);
+
+                return this;
+            }
+
+            public BindingBuilder<TModel> With<TProperty>(Expression<Func<TModel, TProperty>> expression, DropDownList ddl)
+            {
+                var propertyBinder = new PropertyBinder<TModel, TProperty>();
+                propertyBinder.PropertySelector = expression;
+                propertyBinder.ValueExtractor = this.GetParsedValue<TProperty>(() => ddl.SelectedValue);
+                this._properties.Add(propertyBinder);
+
                 return this;
             }
 
@@ -62,13 +78,7 @@ namespace King.FlightSearch.Web.Infrastructure
             {
                 var propertyBinder = new PropertyBinder<TModel, TProperty>();
                 propertyBinder.PropertySelector = expression;
-
-                if(typeof(TProperty) == typeof(Guid))
-                    propertyBinder.ValueExtractor = () => (TProperty)(object)Guid.Parse(hdn.Value);
-                
-                if(typeof(TProperty) == typeof(string))
-                    propertyBinder.ValueExtractor = () => (TProperty)(object)hdn.Value;
-
+                propertyBinder.ValueExtractor = this.GetParsedValue<TProperty>(() => hdn.Value);
                 this._properties.Add(propertyBinder);
 
                 return this;
@@ -82,6 +92,48 @@ namespace King.FlightSearch.Web.Infrastructure
                     prop.SetModelProperty(model);
 
                 return model;
+            }
+
+            private Func<TProperty> GetParsedValue<TProperty>(Func<string> valueSelector)
+            {
+                var destinationType = typeof(TProperty);
+                var isNullable = false;
+
+                if(destinationType.IsNullable())
+                {
+                    isNullable = true;
+                    destinationType = destinationType.GetUnderlyingTypeForNullable();
+                }
+
+                if (destinationType.IsEnum)
+                    return () => {
+                        var val = valueSelector();
+                        int outVal;
+                        if (int.TryParse(val, out outVal))
+                            return (TProperty)(object)outVal;
+
+                        return (TProperty)(object)Enum.Parse(destinationType, valueSelector());
+                    };
+
+                if (destinationType == typeof(Guid))
+                    return () => (TProperty)(object)Guid.Parse(valueSelector());
+
+                if (destinationType == typeof(string))
+                    return () => (TProperty)(object)valueSelector();
+
+                if (destinationType == typeof(DateTime))
+                    return () =>
+                    {
+                        if (isNullable && string.IsNullOrWhiteSpace(valueSelector()))
+                            return (TProperty)(object)null;
+
+                        return (TProperty)(object)DateTime.ParseExact(valueSelector(), "d.M.yyyy", null);
+                    };
+
+                if (destinationType == typeof(int))
+                    return () => (TProperty)(object)int.Parse(valueSelector());
+
+                throw new ArgumentException();
             }
         }
 

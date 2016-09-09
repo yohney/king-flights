@@ -22,4 +22,20 @@ namespace System.Linq.Expressions
             }
         }
     }
+
+    public static class TypeExtensions
+    {
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        public static Type GetUnderlyingTypeForNullable(this Type type)
+        {
+            if (!type.IsNullable())
+                return null;
+
+            return type.GetGenericArguments().FirstOrDefault();
+        }
+    }
 }
