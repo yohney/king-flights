@@ -20,7 +20,8 @@ namespace King.FlightSearch.Web
             base.OnInit(e);
 
             this.RegisterBindings<FlightSearchModel>()
-                .With(p => p.AirportFromId, this.txtDeparture)
+                .With(p => p.AirportFromId, this.hdnDepartureId)
+                .With(p => p.AirportToId, this.hdnDestinationId)
                 .Save();
         }
 

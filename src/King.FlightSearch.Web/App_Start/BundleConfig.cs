@@ -41,6 +41,14 @@ namespace King.FlightSearch.Web
                     Path = "~/Scripts/respond.min.js",
                     DebugPath = "~/Scripts/respond.js",
                 });
+
+            ScriptManager.ScriptResourceMapping.AddDefinition(
+                "jquery-ui",
+                new ScriptResourceDefinition
+                {
+                    Path = "~/Scripts/jquery-ui-1.12.0.min.js",
+                    DebugPath = "~/Scripts/jquery-ui-1.12.0.js",
+                });
         }
     }
 }

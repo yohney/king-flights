@@ -58,6 +58,42 @@ namespace King.FlightSearch.Web {
         protected global::System.Web.UI.WebControls.HiddenField hdnDepartureId;
         
         /// <summary>
+        /// vldDeparture control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator vldDeparture;
+        
+        /// <summary>
+        /// txtDestination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDestination;
+        
+        /// <summary>
+        /// hdnDestinationId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDestinationId;
+        
+        /// <summary>
+        /// vldDestination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator vldDestination;
+        
+        /// <summary>
         /// btnSearch control.
         /// </summary>
         /// <remarks>
